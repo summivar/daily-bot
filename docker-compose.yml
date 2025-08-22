@@ -9,6 +9,7 @@ services:
       - "${APP_PORT}:${APP_PORT}"
     volumes:
       - ./logs:/app/logs
+    restart: unless-stopped
 
   postgres:
     image: postgres:17-alpine
@@ -24,3 +25,4 @@ services:
       - ./database:/data/postgres
     ports:
       - "${DATABASE_PORT}:${DATABASE_PORT}"
+    restart: unless-stopped
