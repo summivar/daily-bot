@@ -1,0 +1,61 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  tgid      BigInt   @unique @map("telegram_id")
+  username  String?
+  firstName String?  @map("first_name")
+  lastName  String?  @map("last_name")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  settings Settings?
+  entries  Entry[]
+
+  @@map("users")
+}
+
+model Settings {
+  id               Int     @id @default(autoincrement())
+  userId           Int     @unique @map("user_id")
+  remindersEnabled Boolean @default(false) @map("reminders_enabled")
+  reminderHour     Int     @default(21) @map("reminder_hour")
+  reminderMinute   Int     @default(0) @map("reminder_minute")
+  timezone         String  @default("UTC")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("settings")
+}
+
+model Entry {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  entryDate DateTime @map("entry_date") @db.Date
+  text      String
+  rating    Int?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, entryDate], map: "uq_user_date")
+  @@map("entries")
+}
+
+// Custom constraint for rating validation (1-10)
+// Note: Prisma doesn't support CHECK constraints directly in schema
+// This will be added via raw SQL in migrations

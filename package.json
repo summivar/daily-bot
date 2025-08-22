@@ -1,0 +1,55 @@
+{
+  "name": "telegram-diary-bot",
+  "version": "1.0.0",
+  "description": "A comprehensive Telegram diary bot with TypeScript, grammY, Bun, Prisma, and PostgreSQL",
+  "main": "src/main.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "bun --hot src/main.ts",
+    "start": "bun src/main.ts",
+    "build": "bun build src/main.ts --outdir ./dist --target bun --minify",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
+    "db:studio": "prisma studio",
+    "db:seed": "bun prisma/seed.ts",
+    "docker:build": "docker build -t telegram-diary-bot .",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f app",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "format": "prettier --write src/**/*.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "grammy": "^1.29.0",
+    "@grammyjs/menu": "^1.2.2",
+    "@grammyjs/conversations": "^1.2.0",
+    "@grammyjs/hydrate": "^1.4.1",
+    "prisma": "^5.20.0",
+    "@prisma/client": "^5.20.0",
+    "zod": "^3.23.8",
+    "date-fns": "^4.1.0",
+    "date-fns-tz": "^3.2.0",
+    "csv-writer": "^1.6.0",
+    "node-cron": "^3.0.3",
+    "@types/node-cron": "^3.0.11"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.1.10",
+    "@types/node": "^22.7.4",
+    "@typescript-eslint/eslint-plugin": "^8.8.0",
+    "@typescript-eslint/parser": "^8.8.0",
+    "eslint": "^9.12.0",
+    "prettier": "^3.3.3",
+    "typescript": "^5.9.0"
+  },
+  "engines": {
+    "bun": ">=1.1.0",
+    "node": ">=20.0.0"
+  },
+  "prisma": {
+    "schema": "prisma/schema.prisma"
+  }
+}
